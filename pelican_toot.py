@@ -10,5 +10,5 @@ logger = logging.getLogger(__name__)
 
 from pelican import signals
 
-# https://github.com/bear/python-twitter/wiki
-import Mastodon.py
+# https://github.com/halcy/Mastodon.py
+from mastodon import Mastodon
