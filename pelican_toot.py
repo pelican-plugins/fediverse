@@ -43,9 +43,9 @@ def post_on_mastodon(settings, new_posts):
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
-      print('Pelican_toot: Mastodon access credentials not configured...')
+      logger.warning('Pelican_toot: Mastodon access credentials not configured...')
       sys.exit(9)
-   
+
    # if pelicantoot_clientcred.secret does not exist it means we have to create the app on Mastodon
    if os.path.exists('pelicantoot_clientcred.secret') == False:
       Mastodon.create_app(
@@ -62,7 +62,7 @@ def post_on_mastodon(settings, new_posts):
       title = article.title
       post = build_message % (title.replace('&nbsp;',' '), url)
       print(post.encode('utf-8'))
-      
+
    return True
 
 # Extract the list of new posts
@@ -103,13 +103,19 @@ def post_updates(generator, writer):
                new_taglist = []
                for i in taglist:
                   new_taglist.append('#' + str(i))
-                  tags_to_publish = ''.join(str(x) for x in new_taglist)
+                  tags_to_publish = ', '.join(str(x) for x in new_taglist)
                mastodon_toot = title_to_publish + summary_to_publish + tags_to_publish
             else:
                mastodon_toot = title_to_publish + summary_to_publish
-            mastodon.toot(mastodon_toot)
+            # check the length of the final post
+            toot_maxlength = 480 # Actually 500 but keep a safety gap...
+            if len(mastodon_toot) >= toot_maxlength:
+               logger.warning('Pelican_toot: your toot exceeds Mastodon max limit... ')
+               sys.exit(9)
+            else:
+               print(mastodon_toot)
+               #mastodon.toot(mastodon_toot)
          write_articleslist(articleslist)
-            
 
 def register():
    try:
