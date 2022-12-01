@@ -113,8 +113,7 @@ def post_updates(generator, writer):
                logger.warning('Pelican_toot: your toot exceeds Mastodon max limit... ')
                sys.exit(9)
             else:
-               print(mastodon_toot)
-               #mastodon.toot(mastodon_toot)
+               mastodon.toot(mastodon_toot)
          write_articleslist(articleslist)
 
 def register():
