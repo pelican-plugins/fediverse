@@ -54,14 +54,16 @@ def post_on_mastodon(settings, new_posts):
          to_file = 'pelicantoot_clientcred.secret'
       )
 
-   # Advise the user with an on-screen message
-   build_message = 'Publishing on Mastodon: %s\n%s\n'
+   # Advise the user with an on-screen message. We are ready to publish!
+   build_message = 'Publishing on Mastodon: %s (%s)'
 
    for article in new_posts:
-      url = article.get_siteurl() + '/' + article.url
+      url = article.get_siteurl() + article.url
       title = article.title
-      post = build_message % (title.replace('&nbsp;',' '), url)
-      print(post.encode('utf-8'))
+      htmltext = build_message % (title.replace('&nbsp;',' '), url)
+      cleantext = html.fromstring(htmltext)
+      finaltext = cleantext.text_content().strip()
+      print(finaltext)
 
    return True
 
@@ -97,22 +99,24 @@ def post_updates(generator, writer):
             title_to_publish = titlecleantext.text_content().strip() + '\n\n'
             articlehtmltext = article.summary
             articlecleantext = html.fromstring(articlehtmltext)
-            summary_to_publish = articlecleantext.text_content().strip() + '\n\n'
+            summary_to_publish = articlecleantext.text_content().strip() + '\n'
+            read_more = 'Read more: ' + article.get_siteurl() + '/' + article.url + '\n\n'
             if hasattr(article, 'tags'):
                taglist = article.tags
                new_taglist = []
                for i in taglist:
                   new_taglist.append('#' + str(i))
                   tags_to_publish = ', '.join(str(x) for x in new_taglist)
-               mastodon_toot = title_to_publish + summary_to_publish + tags_to_publish
+               mastodon_toot = title_to_publish +  summary_to_publish + read_more +  tags_to_publish
             else:
-               mastodon_toot = title_to_publish + summary_to_publish
+               mastodon_toot = title_to_publish + summary_to_publish + read_more
             # check the length of the final post
-            toot_maxlength = 480 # Actually 500 but keep a safety gap...
+            toot_maxlength = 490 # Actually 500 but let's keep a safety gap...
             if len(mastodon_toot) >= toot_maxlength:
                logger.warning('Pelican_toot: your toot exceeds Mastodon max limit... ')
                sys.exit(9)
             else:
+               #print(mastodon_toot)
                mastodon.toot(mastodon_toot)
          write_articleslist(articleslist)
 
