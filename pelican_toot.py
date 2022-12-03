@@ -106,7 +106,7 @@ def post_updates(generator, writer):
                new_taglist = []
                for i in taglist:
                   new_taglist.append('#' + str(i))
-                  tags_to_publish = ', '.join(str(x) for x in new_taglist)
+                  tags_to_publish = ', '.join(str(x).replace(" ", "") for x in new_taglist)
                mastodon_toot = title_to_publish +  summary_to_publish + read_more +  tags_to_publish
             else:
                mastodon_toot = title_to_publish + summary_to_publish + read_more
