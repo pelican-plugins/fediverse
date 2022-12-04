@@ -1,4 +1,5 @@
 # Pelican-toot
+
 A Pelican plugin to publish content on Mastodon
 
 Hacked from [Pelican-tweet](https://github.com/mpaglia0/Pelican-tweet).
@@ -9,7 +10,7 @@ Needs Python > 3.0
 
 *Pelican-toot* will search your contents for articles (actually ALL contents except pages) that are not in a `draft` status.
 
-On its first run it creates a file called `posted_on_Mastodon.txt` in your Pelican root directory.
+On its first run it creates a file called `posted_on_Mastodon.txt` in your Pelican root directory populated with all your article tags.
 
 Then it tries to post all eligible articles to Mastodon and - if post routine returns no errors - writes article URL in `posted_on_Mastodon.txt`.
 
@@ -22,6 +23,14 @@ This release can publish:
 - Title of article
 - Body of article
 - hashtag(s) if any
+
+Title is taken from `article.title`
+
+Body is taken from `article.summary` with standard Pelican configuartion i.e. length trimmed to 50 words and summary ends with `...`
+
+In a future release *Pelican-toot* must have its own configuration parameter for length of text sicne Mastodon accepts posts with max 500 bytes.
+
+Now if your post exceeds this limit you simply will receive the errore message `your toot exceeds Mastodon max limit...`
 
 ## Mastodon APIs
 
@@ -38,4 +47,4 @@ There is no need to register an app in your Mastodon profile because *Pelican-to
 
 On every run *Pelican-toot* looks for a file called `pelicantoot_clientcred.secret` and - if it is not found - it gets in touch with Mastodon, creates an app called *PelicanToot* and writes API keys and other necessary information in this file.
 
-If you cancel this file *Pelican-toot* will create another app (this could be done in case of problem despite the fact Mastodon advise this is NOT a good behaviour since app should be created only once).
+If you **cancel** this file *Pelican-toot* will create another app on its next run (this could be done in case of problem despite the fact Mastodon advise this is NOT a good behaviour since app should be created only once).
