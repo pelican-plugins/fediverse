@@ -32,7 +32,7 @@ In a future release *Pelican-toot* must have its own configuration parameter for
 
 Hashtag(s) are taken - if any - from `article.tags` and concatenated separating each of them with commas.
 
-Pelican can handle tags with whitespaces (for example `#My nice article`) without problems but hashtags in Mastodon are all written without. For this reason all whitespaces in Pelican hashtags will be trimmed (`#Mynicearticle`).
+Pelican can handle tags with whitespaces (for example `#My nice article`) without problems but hashtags in Mastodon are all written without. For this reason all whitespaces from Pelican hashtags will be removed before publishing (`#Mynicearticle`).
 
 Now if your post exceeds this limit you simply will receive the errore message `your toot exceeds Mastodon max limit...`
 
