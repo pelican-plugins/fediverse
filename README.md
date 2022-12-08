@@ -26,15 +26,13 @@ This release can publish:
 
 Title is taken from `article.title`
 
-Body is taken from `article.summary` with standard Pelican configuartion i.e. length trimmed to 50 words and summary ends with `...`
+Body is taken from `article.summary` with standard Pelican configuartion i.e. length trimmed to 50 words and summary ends with `...` OR with parameters you set in `pelicanconf.py` (`SUMMARY_MAX_LENGTH` and `SUMMARY_END_SUFFIX`).
 
-In a future release *Pelican-toot* must have its own configuration parameter for length of text since Mastodon accepts posts with max 500 bytes.
+If the total length of the post exceeds MAX length allowed from Mastodon, then *Pelican-toot* will trim `article.summary` accordingly.
 
 Hashtag(s) are taken - if any - from `article.tags` and concatenated separating each of them with commas.
 
 Pelican can handle tags with whitespaces (for example `#My nice article`) without problems but hashtags in Mastodon are all written without. For this reason all whitespaces from Pelican hashtags will be removed before publishing (`#Mynicearticle`).
-
-Now if your post exceeds this limit you simply will receive the errore message `your toot exceeds Mastodon max limit...`
 
 ## Mastodon APIs
 

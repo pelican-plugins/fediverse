@@ -92,6 +92,8 @@ def post_updates(generator, writer):
             api_base_url = mt_base_url
          )
          # Actually build the post structure
+         # First set a maximum length for the final post
+         toot_maxlength = 490 # Actually 500 but let's keep a safety gap for miscalculation...
          for article in new_posts:
             articleslist.append(article.url)
             titlehtmltext = article.title
@@ -100,23 +102,29 @@ def post_updates(generator, writer):
             articlehtmltext = article.summary
             articlecleantext = html.fromstring(articlehtmltext)
             summary_to_publish = articlecleantext.text_content().strip() + '\n'
-            read_more = 'Read more: ' + article.get_siteurl() + '/' + article.url + '\n\n'
+            read_more = 'Leggi tutto: ' + article.get_siteurl() + '/' + article.url + '\n\n'
             if hasattr(article, 'tags'):
                taglist = article.tags
                new_taglist = []
                for i in taglist:
                   new_taglist.append('#' + str(i))
                   tags_to_publish = ', '.join(str(x).replace(" ", "") for x in new_taglist)
-               mastodon_toot = title_to_publish +  summary_to_publish + read_more +  tags_to_publish
+               toot_length = len(title_to_publish) + len(summary_to_publish) + len(read_more) + len(tags_to_publish)
+               if toot_length > toot_maxlength:
+                  truncate = toot_maxlength - len(title_to_publish) - len(tags_to_publish) - len(read_more) - 4
+                  summary_to_publish = summary_to_publish[:truncate] + ' ...' + '\n'
+                  mastodon_toot = title_to_publish + summary_to_publish + read_more + tags_to_publish
+               else:
+                  mastodon_toot = title_to_publish + summary_to_publish + read_more + tags_to_publish
             else:
-               mastodon_toot = title_to_publish + summary_to_publish + read_more
-            # check the length of the final post
-            toot_maxlength = 490 # Actually 500 but let's keep a safety gap...
-            if len(mastodon_toot) >= toot_maxlength:
-               logger.warning('Pelican_toot: your toot exceeds Mastodon max limit... ')
-               sys.exit(9)
-            else:
-               mastodon.toot(mastodon_toot)
+               toot_length = len(title_to_publish) + len(summary_to_publish) + len(read_more)
+               if toot_length > toot_maxlength:
+                  truncate = toot_maxlength - len(title_to_publish) - len(read_more) - 4
+                  summary_to_publish = summary_to_publish[:truncate] + ' ...' + '\n'
+                  mastodon_toot = title_to_publish + summary_to_publish + read_more
+               else:
+                  mastodon_toot = title_to_publish + summary_to_publish + read_more
+            mastodon.toot(mastodon_toot)
          write_articleslist(articleslist)
 
 def register():
