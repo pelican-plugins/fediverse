@@ -10,7 +10,7 @@ Hacked from [Pelican-tweet](https://github.com/mpaglia0/Pelican-tweet).
 
 *Pelican-toot* will search your contents for articles (actually ALL contents except pages) that are not in a `draft` status.
 
-On its first run it creates a file called `posted_on_Mastodon.txt` in your Pelican root directory populated with all your article tags.
+On its first run it creates a file called `posted_on_Mastodon.txt` in your Pelican root directory populated with all your article URLs.
 
 Then it tries to post all eligible articles to Mastodon and - if post routine returns no errors - writes article URL in `posted_on_Mastodon.txt`.
 
