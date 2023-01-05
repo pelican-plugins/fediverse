@@ -4,7 +4,7 @@ A Pelican plugin to publish content on Mastodon
 
 Hacked from [Pelican-tweet](https://github.com/mpaglia0/Pelican-tweet).
 
-Needs Python > 3.0
+:warning: Needs Python > 3.0
 
 ## How it works
 
