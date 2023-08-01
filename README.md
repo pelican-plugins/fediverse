@@ -2,7 +2,7 @@
 
 A Pelican plugin to publish content on the Fediverse
 
-!warning! Under development. Presently only Mastodon is supported. DEVELOPERS NEEDED!
+:warning: Under development. Presently only Mastodon is supported. DEVELOPERS NEEDED!
 
 Hacked from [Pelican-tweet](https://github.com/mpaglia0/Pelican-tweet).
 
