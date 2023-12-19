@@ -1,1 +1,1 @@
-from .pelican_toot import *
+from .fediverse import *

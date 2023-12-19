@@ -43,15 +43,15 @@ def post_on_mastodon(settings, new_posts):
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
-      logger.warning('Pelican_toot: Mastodon access credentials not configured...')
+      logger.warning('Pelican_fediverse: Mastodon access credentials not configured...')
       sys.exit(9)
 
    # if pelicantoot_clientcred.secret does not exist it means we have to create the app on Mastodon
-   if os.path.exists('pelicantoot_clientcred.secret') == False:
+   if os.path.exists('pelicanfediverse_clientcred.secret') == False:
       Mastodon.create_app(
-         'PelicanToot',
+         'PelicanFediverse',
          api_base_url = mt_base_url,
-         to_file = 'pelicantoot_clientcred.secret'
+         to_file = 'pelicanfediverse_clientcred.secret'
       )
 
    # Advise the user with an on-screen message. We are ready to publish!
@@ -79,16 +79,16 @@ def post_updates(generator, writer):
    if new_posts:
       if post_on_mastodon(generator.settings, new_posts):
          mastodon = Mastodon(
-            client_id = 'pelicantoot_clientcred.secret',
+            client_id = 'pelicanfediverse_clientcred.secret',
             api_base_url = mt_base_url
          )
          mastodon.log_in(
             mt_username,
             mt_password,
-            to_file = 'pelicantoot_usercred.secret'
+            to_file = 'pelicanfediverse_usercred.secret'
          )
          mastodon = Mastodon(
-            access_token = 'pelicantoot_usercred.secret',
+            access_token = 'pelicanfediverse_usercred.secret',
             api_base_url = mt_base_url
          )
          # Actually build the post structure
@@ -102,7 +102,7 @@ def post_updates(generator, writer):
             articlehtmltext = article.summary
             articlecleantext = html.fromstring(articlehtmltext)
             summary_to_publish = articlecleantext.text_content().strip() + '\n'
-            read_more = 'Leggi tutto: ' + article.get_siteurl() + '/' + article.url + '\n\n'
+            read_more = 'Read more... ' + article.get_siteurl() + '/' + article.url + '\n\n'
             if hasattr(article, 'tags'):
                taglist = article.tags
                new_taglist = []
