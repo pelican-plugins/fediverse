@@ -4,8 +4,6 @@ A Pelican plugin to publish content on the Fediverse
 
 :warning: Under development. Presently only Mastodon is supported. DEVELOPERS NEEDED!
 
-Hacked from [Pelican-tweet](https://github.com/mpaglia0/Pelican-tweet).
-
 :warning: Needs Python > 3.0
 
 ## How it works (Mastodon)
