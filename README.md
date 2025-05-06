@@ -38,13 +38,14 @@ Pelican can nicely handle tags with whitespaces (for example `#My nice article`)
 
 This plugin depends on [Mastodon.py](https://github.com/halcy/Mastodon.py).
 
-In order to publish on Mastodon you need to enter in `publishconf.py` the following information:
+In order to publish on Mastodon you need to enter in `.env` file, on the site root directory, the following information:
 
 ``` python
-MASTODON_BASE_URL = 'URL of your Mastodon instance. For example https://mastodon.social'
-MASTODON_USERNAME = 'Your username for Mastodon login'
-MASTODON_PASSWORD = 'You password for Mastodon login'
+MASTODON_BASE_URL="URL of your Mastodon instance. For example https://mastodon.social"
+MASTODON_USERNAME="Your username for Mastodon login"
+MASTODON_PASSWORD="You password for Mastodon login"
 ```
+
 There is no need to register an app in your Mastodon profile because *Fediverse* will do it for you!
 
 On every run *Fediverse* looks for a file called `pelicanfediverse_clientcred.secret` and - if it is not found - it gets in touch with Mastodon, creates an app called *PelicanFediverse* and writes API keys and other necessary information in this file.
