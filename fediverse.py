@@ -7,6 +7,7 @@ import sys
 import string
 from lxml import html
 import os.path
+from dotenv import load_dotenv
 
 import logging
 logger = logging.getLogger(__name__)
@@ -35,13 +36,18 @@ def write_articleslist(articleslist):
 # Collect config info and start the main procedure
 def post_on_mastodon(settings, new_posts):
 
+   load_dotenv()
    global mt_base_url
    mt_base_url = os.getenv('MASTODON_BASE_URL')
    global mt_username
    mt_username = os.getenv('MASTODON_USERNAME')
    global mt_password
-   mt_password = settings.get('MASTODON_PASSWORD', '')
    mt_password = os.getenv('MASTODON_PASSWORD')
+
+   global mt_read_more
+   mt_read_more = settings.get('MASTODON_READ_MORE', '')
+   global mt_visibility
+   mt_visibility = settings.get('MASTODON_VISIBILITY', '')
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
