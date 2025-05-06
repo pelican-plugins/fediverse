@@ -75,6 +75,7 @@ def post_on_mastodon(settings, new_posts):
 
    return True
 
+
 # Extract the list of new posts
 def post_updates(generator, writer):
    articleslist = read_articleslist()
@@ -110,7 +111,7 @@ def post_updates(generator, writer):
             articlehtmltext = article.summary
             articlecleantext = html.fromstring(articlehtmltext)
             summary_to_publish = articlecleantext.text_content().strip() + '\n'
-            read_more = 'Read more... ' + article.get_siteurl() + '/' + article.url + '\n\n'
+            read_more = mt_read_more + article.get_siteurl() + '/' + article.url + '\n\n'
             if hasattr(article, 'tags'):
                taglist = article.tags
                new_taglist = []
@@ -132,8 +133,11 @@ def post_updates(generator, writer):
                   mastodon_toot = title_to_publish + summary_to_publish + read_more
                else:
                   mastodon_toot = title_to_publish + summary_to_publish + read_more
-            mastodon.toot(mastodon_toot)
+
+            mastodon.status_post(mastodon_toot, visibility=mt_visibility)
+
          write_articleslist(articleslist)
+
 
 def register():
    try:
