@@ -34,12 +34,14 @@ def write_articleslist(articleslist):
 
 # Collect config info and start the main procedure
 def post_on_mastodon(settings, new_posts):
+
    global mt_base_url
-   mt_base_url = settings.get('MASTODON_BASE_URL', '')
+   mt_base_url = os.getenv('MASTODON_BASE_URL')
    global mt_username
-   mt_username = settings.get('MASTODON_USERNAME', '')
+   mt_username = os.getenv('MASTODON_USERNAME')
    global mt_password
    mt_password = settings.get('MASTODON_PASSWORD', '')
+   mt_password = os.getenv('MASTODON_PASSWORD')
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
