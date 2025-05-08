@@ -45,9 +45,9 @@ def post_on_mastodon(settings, new_posts):
    mt_password = os.getenv('MASTODON_PASSWORD')
 
    global mt_read_more
-   mt_read_more = settings.get('MASTODON_READ_MORE', '')
+   mt_read_more = settings.get('MASTODON_READ_MORE', 'Read more: ')
    global mt_visibility
-   mt_visibility = settings.get('MASTODON_VISIBILITY', '')
+   mt_visibility = settings.get('MASTODON_VISIBILITY', 'direct')
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
