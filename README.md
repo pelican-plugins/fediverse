@@ -51,3 +51,16 @@ There is no need to register an app in your Mastodon profile because *Fediverse*
 On every run *Fediverse* looks for a file called `pelicanfediverse_clientcred.secret` and - if it is not found - it gets in touch with Mastodon, creates an app called *PelicanFediverse* and writes API keys and other necessary information in this file.
 
 If you **cancel** this file *Fediverse* will create another app on its next run (this could be done in case of problem despite the fact Mastodon advise this is NOT a good behaviour since app should be created only once).
+
+## parameters
+
+In `pelicanconf.py` some new parameters can be defined
+
+ - **MASTODON_VISIBILITY** : Set post's visiblity on mastodon. Can be 'direct', 'private', 'unlisted' or 'public'. Default value = 'direct' 
+More details : https://mastodonpy.readthedocs.io/en/stable/05_statuses.html#writing 
+ - **MASTODON_READ_MORE** : Text to add at the end of the post, before link to the pelican's article. Default value = 'Read more: '
+
+``` Python
+MASTODON_VISIBILITY='direct'
+MASTODON_READ_MORE='Read more: '
+``` 
