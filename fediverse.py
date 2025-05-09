@@ -7,6 +7,7 @@ import sys
 import string
 from lxml import html
 import os.path
+from dotenv import load_dotenv
 
 import logging
 logger = logging.getLogger(__name__)
@@ -34,12 +35,19 @@ def write_articleslist(articleslist):
 
 # Collect config info and start the main procedure
 def post_on_mastodon(settings, new_posts):
+
+   load_dotenv()
    global mt_base_url
-   mt_base_url = settings.get('MASTODON_BASE_URL', '')
+   mt_base_url = os.getenv('MASTODON_BASE_URL')
    global mt_username
-   mt_username = settings.get('MASTODON_USERNAME', '')
+   mt_username = os.getenv('MASTODON_USERNAME')
    global mt_password
-   mt_password = settings.get('MASTODON_PASSWORD', '')
+   mt_password = os.getenv('MASTODON_PASSWORD')
+
+   global mt_read_more
+   mt_read_more = settings.get('MASTODON_READ_MORE', 'Read more: ')
+   global mt_visibility
+   mt_visibility = settings.get('MASTODON_VISIBILITY', 'direct')
 
    # check if config file has been duly filled or print an error message and exit
    if mt_base_url == '' or mt_username == '' or mt_password == '':
@@ -66,6 +74,7 @@ def post_on_mastodon(settings, new_posts):
       print(finaltext)
 
    return True
+
 
 # Extract the list of new posts
 def post_updates(generator, writer):
@@ -102,7 +111,7 @@ def post_updates(generator, writer):
             articlehtmltext = article.summary
             articlecleantext = html.fromstring(articlehtmltext)
             summary_to_publish = articlecleantext.text_content().strip() + '\n'
-            read_more = 'Read more... ' + article.get_siteurl() + '/' + article.url + '\n\n'
+            read_more = mt_read_more + article.get_siteurl() + '/' + article.url + '\n\n'
             if hasattr(article, 'tags'):
                taglist = article.tags
                new_taglist = []
@@ -124,8 +133,11 @@ def post_updates(generator, writer):
                   mastodon_toot = title_to_publish + summary_to_publish + read_more
                else:
                   mastodon_toot = title_to_publish + summary_to_publish + read_more
-            mastodon.toot(mastodon_toot)
+
+            mastodon.status_post(mastodon_toot, visibility=mt_visibility)
+
          write_articleslist(articleslist)
+
 
 def register():
    try:
