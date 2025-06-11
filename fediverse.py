@@ -37,21 +37,28 @@ def write_articleslist(articleslist):
 def post_on_mastodon(settings, new_posts):
 
    load_dotenv()
+   # Load admin details
    global mt_base_url
    mt_base_url = os.getenv('MASTODON_BASE_URL')
    global mt_username
-   mt_username = os.getenv('MASTODON_USERNAME')
+   mt_username = os.getenv('MASTODON_USERNAME') # DEPRECATED: to be removed asap
    global mt_password
-   mt_password = os.getenv('MASTODON_PASSWORD')
-
+   mt_password = os.getenv('MASTODON_PASSWORD') # DEPRECATED to be removed asap
+   global mt_token
+   mt_token = os.getenv('MASTODON_OAUTH_TOKEN')
+   # Load other details
    global mt_read_more
    mt_read_more = settings.get('MASTODON_READ_MORE', 'Read more: ')
    global mt_visibility
    mt_visibility = settings.get('MASTODON_VISIBILITY', 'direct')
 
-   # check if config file has been duly filled or print an error message and exit
-   if mt_base_url == '' or mt_username == '' or mt_password == '':
-      logger.warning('Pelican_fediverse: Mastodon access credentials not configured...')
+   # check if config file contains username and password and prompt the user this is deprecated
+   if mt_username != '' or mt_password != '':
+      logger.warning('Pelican_fediverse: WARNING: password authentication is DEPRECATED and will be removed soon!\nPlease use OAuth token instead...')
+
+   # check if config file contains OAuth token and exit if not
+   if mt_base_url == '' or mt_token == '':
+      logger.warning('Pelican_fediverse: Mastodon instance URL and/or OAuth token are missing!\nPlease check your config file...')
       sys.exit(9)
 
    # if pelicantoot_clientcred.secret does not exist it means we have to create the app on Mastodon
@@ -63,7 +70,7 @@ def post_on_mastodon(settings, new_posts):
       )
 
    # Advise the user with an on-screen message. We are ready to publish!
-   build_message = 'Publishing on Mastodon: %s (%s)'
+   build_message = 'Ready to publish on Mastodon: %s (%s)'
 
    for article in new_posts:
       url = article.get_siteurl() + article.url
@@ -92,16 +99,15 @@ def post_updates(generator, writer):
             api_base_url = mt_base_url
          )
          mastodon.log_in(
-            mt_username,
-            mt_password,
+            mt_token,
             to_file = 'pelicanfediverse_usercred.secret'
          )
          mastodon = Mastodon(
             access_token = 'pelicanfediverse_usercred.secret',
             api_base_url = mt_base_url
          )
-         # Actually build the post structure
-         # First set a maximum length for the final post
+         # Build the post structure
+         # First, set a maximum length for the final post
          toot_maxlength = 490 # Actually 500 but let's keep a safety gap for miscalculation...
          for article in new_posts:
             articleslist.append(article.url)
