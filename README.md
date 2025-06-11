@@ -42,9 +42,10 @@ In order to publish on Mastodon you need to enter in `.env` file, on the site ro
 
 ``` python
 MASTODON_BASE_URL="URL of your Mastodon instance. For example https://mastodon.social"
-MASTODON_USERNAME="Your username for Mastodon login"
-MASTODON_PASSWORD="You password for Mastodon login"
+MASTODON_OAUTH_TOKEN="Token of your Mastodon registered App"
 ```
+
+:exclamation: Starting from Mastodon 4.4.0 posting using Username/Password has been deprecated. Now you have to use the OAuth Token method instead. Your OAuth Token is available in the admin page of your web Mastodon page.
 
 There is no need to register an app in your Mastodon profile because *Fediverse* will do it for you!
 
@@ -59,7 +60,8 @@ In `pelicanconf.py` some new parameters can be defined
 
  - **MASTODON_VISIBILITY** : Set post's visiblity on mastodon. Can be 'direct', 'private', 'unlisted' or 'public'. Default value = 'direct' 
 
-  More details : https://mastodonpy.readthedocs.io/en/stable/05_statuses.html#writing 
+  More details : https://mastodonpy.readthedocs.io/en/stable/05_statuses.html#writing
+  
  - **MASTODON_READ_MORE** : Text to add at the end of the post, before link to the pelican's article. Default value = 'Read more: '
 
 ``` Python
