@@ -113,27 +113,33 @@ def post_updates(generator, writer):
             articlecleantext = html.fromstring(articlehtmltext)
             summary_to_publish = articlecleantext.text_content().strip() + '\n'
             read_more = mt_read_more + article.get_siteurl() + '/' + article.url + '\n\n'
+
+            fedi_tag_list = []
+            tags_to_publish = ''
+
+            if hasattr(article, 'ftags'):
+               for ftag in article.ftags.split(','):
+                  fedi_tag_list.append('#' + ftag.replace(' ', ''))
+
             if hasattr(article, 'tags'):
-               taglist = article.tags
-               new_taglist = []
-               for i in taglist:
-                  new_taglist.append('#' + str(i))
-                  tags_to_publish = ', '.join(str(x).replace(" ", "") for x in new_taglist)
-               toot_length = len(title_to_publish) + len(summary_to_publish) + len(read_more) + len(tags_to_publish)
-               if toot_length > toot_maxlength:
-                  truncate = toot_maxlength - len(title_to_publish) - len(tags_to_publish) - len(read_more) - 4
-                  summary_to_publish = summary_to_publish[:truncate] + ' ...' + '\n'
-                  mastodon_toot = title_to_publish + summary_to_publish + read_more + tags_to_publish
-               else:
-                  mastodon_toot = title_to_publish + summary_to_publish + read_more + tags_to_publish
-            else:
-               toot_length = len(title_to_publish) + len(summary_to_publish) + len(read_more)
-               if toot_length > toot_maxlength:
-                  truncate = toot_maxlength - len(title_to_publish) - len(read_more) - 4
-                  summary_to_publish = summary_to_publish[:truncate] + ' ...' + '\n'
-                  mastodon_toot = title_to_publish + summary_to_publish + read_more
-               else:
-                  mastodon_toot = title_to_publish + summary_to_publish + read_more
+               for tag in article.tags:
+                  fedi_tag_list.append('#' + str(tag).replace(' ',''))
+
+            if fedi_tag_list:
+               tags_to_publish = ', '.join(fedi_tag_list)
+
+            toot_length = (len(title_to_publish)  +
+                           len(summary_to_publish) +
+                           len(read_more) +
+                           len(tags_to_publish))
+
+            if toot_length > toot_maxlength:
+               truncate = (toot_maxlength - len(title_to_publish) -
+                           len(tags_to_publish) - len(read_more) - 4)
+               summary_to_publish = summary_to_publish[
+                                    :truncate] + ' ...' + '\n'
+
+            mastodon_toot = title_to_publish + summary_to_publish + read_more + tags_to_publish
 
             mastodon.status_post(mastodon_toot, visibility=mt_visibility)
 
