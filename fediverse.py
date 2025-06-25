@@ -52,6 +52,9 @@ def post_on_mastodon(settings, new_posts):
    global mt_visibility
    mt_visibility = settings.get('MASTODON_VISIBILITY', 'direct')
 
+   global mt_fediverse_tags
+   mt_fediverse_tags = settings.get('FEDIVERSE_TAGS', '')
+
    # check if config file contains username and password and prompt the user this is deprecated
    if mt_username or mt_password in globals():
       logger.warning('Pelican_fediverse: password authentication is DEPRECATED and will be removed soon!\nPlease use OAuth token instead...')
@@ -116,6 +119,11 @@ def post_updates(generator, writer):
 
             fedi_tag_list = []
             tags_to_publish = ''
+
+            # if FEDIVERSE_TAGS is set in pelicanconf.py, add tags to the post
+            if mt_fediverse_tags != '':
+               for tag in mt_fediverse_tags.split(','):
+                  fedi_tag_list.append('#' + tag.replace(' ', ''))
 
             if hasattr(article, 'ftags'):
                for ftag in article.ftags.split(','):

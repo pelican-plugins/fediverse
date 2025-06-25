@@ -65,16 +65,19 @@ On every run *Fediverse* looks for a file called `pelicanfediverse_clientcred.se
 If you **cancel** this file *Fediverse* will create another app on its next run (this could be done in case of problem despite the fact Mastodon advise this is NOT a good behaviour since app should be created only once).
 
 
-## parameters
+## Parameters
 
 In `pelicanconf.py` some new parameters can be defined
 
- - **MASTODON_VISIBILITY** : Set post's visiblity on mastodon. Can be 'direct', 'private', 'unlisted' or 'public'. Default value = 'direct' 
-
-  More details : https://mastodonpy.readthedocs.io/en/stable/05_statuses.html#writing
+ - **MASTODON_VISIBILITY** : Set post's visiblity on mastodon. Can be 'direct', 'private', 'unlisted' or 'public'. Default value = 'direct'
+  <br>More details : https://mastodonpy.readthedocs.io/en/stable/05_statuses.html#writing
   
  - **MASTODON_READ_MORE** : Text to add at the end of the post, before link to the pelican's article. Default value = 'Read more: '
 
+ - **FEDIVERSE_TAGS** : To add same tag on all fediverse post but not on blog post. It is possible to set multiple tags with comma separator. _(ie "MyFirstTag, AnotherOne" generate **#MyFirstTag** and **#AnotherOne**)_
+
 ``` Python
-MASTODON_VISIBILITY='direct'
-MASTODON_READ_MORE='Read more: '
+MASTODON_VISIBILITY = 'direct'
+MASTODON_READ_MORE = 'Read more: '
+FEDIVERSE_TAGS = 'FromMyBlog'
+```
