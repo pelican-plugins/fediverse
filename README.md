@@ -6,6 +6,10 @@ A Pelican plugin to publish content on the Fediverse
 
 :warning: Needs Python > 3.0
 
+## Installation
+
+`pip install pelican-fediverse`
+
 ## How it works (Mastodon)
 
 *Fediverse* will search your contents for articles (actually ALL contents except pages) that are not in a `draft` status.
