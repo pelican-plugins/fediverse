@@ -19,7 +19,7 @@ INSTALL_REQUIRES = [
 
 
 setuptools.setup(
-    name=pelican-vediverse,
+    name=pelican-fediverse,
     version=1.3.1,
     description="A Pelican plugin to publish content on the Fediverse",
     url="https://github.com/pelican-plugins/fediverse",
