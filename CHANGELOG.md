@@ -1,3 +1,6 @@
+# 1.3.1 - First PyPI package
+pelican-fediverse has been packed for PyPI
+
 # 1.3 - Fediverse fixed tags
 You can enter fixed tag(s) to be published on all your contents but only in Mastodon
 
