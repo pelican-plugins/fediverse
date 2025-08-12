@@ -54,6 +54,8 @@ def post_on_mastodon(settings, new_posts):
 
    global mt_fediverse_tags
    mt_fediverse_tags = settings.get('FEDIVERSE_TAGS', '')
+   global mt_all_tags
+   mt_all_tags = settings.get('ALL_TAGS', 'both')
 
    # check if config file contains username and password and prompt the user this is deprecated
    if mt_username or mt_password in globals():
@@ -130,8 +132,9 @@ def post_updates(generator, writer):
                   fedi_tag_list.append('#' + ftag.replace(' ', ''))
 
             if hasattr(article, 'tags'):
-               for tag in article.tags:
-                  fedi_tag_list.append('#' + str(tag).replace(' ',''))
+                  if mt_all_tags = 'both':
+                     for tag in article.tags:
+                        fedi_tag_list.append('#' + str(tag).replace(' ',''))
 
             if fedi_tag_list:
                tags_to_publish = ', '.join(fedi_tag_list)
