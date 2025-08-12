@@ -35,15 +35,30 @@ Hashtag(s) are taken - if any - from `article.tags` and concatenated separating 
 Pelican can nicely handle tags with whitespaces (for example `#My nice article`) but in Mastodon they must be written without. For this reason all whitespaces from Pelican hashtags will be removed before publishing (`#Mynicearticle`).
 
 ### New metadata **ftags**
+
 You can use the `ftags` metadata to add specific tags to a Fediverse post without including Pelican hashtags.
 ```markdown
 Title: This is a ftags sample usage
 Date: 2025-05-23
 Slug: ftags-sample
-tags: tag_on_blog_and_fediverse, another_one
+tags: tag_on_blog_only, another_one
 ftags: TagOnlyOnFediverse, SecondOne
 
 ```
+
+Tags are now manageable through the `pelicanconf.py` file
+
+```markdown
+ALL_TAGS = 'both'
+```
+to publish both tags AND ftags
+
+```markdown
+ALL_TAGS = 'no'
+```
+to publish ftags only.
+
+Default behaviour: publish both.
 
 ## Mastodon APIs
 
