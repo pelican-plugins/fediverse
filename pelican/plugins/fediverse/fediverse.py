@@ -8,6 +8,7 @@ import string
 from lxml import html
 import os.path
 from dotenv import load_dotenv
+from datetime import date, datetime
 
 import logging
 
@@ -35,6 +36,38 @@ def write_articleslist(articleslist):
     with open("posted_on_Mastodon.txt", "w") as f:
         for article in articleslist:
             f.write("%s\n" % article)
+
+
+# Filter articles by date range (MASTODON_DATE_START and MASTODON_DATE_END in pelicanconf.py)
+def filter_by_date(articles, settings):
+    raw_start = settings.get("MASTODON_DATE_START", "")
+    raw_end = settings.get("MASTODON_DATE_END", "")
+
+    # Se nessuna delle due è definita, nessun filtro
+    if not raw_start and not raw_end:
+        return articles
+
+    date_start = datetime.strptime(raw_start, "%Y-%m-%d").date() if raw_start else None
+    date_end = datetime.strptime(raw_end, "%Y-%m-%d").date() if raw_end else date.today()
+
+    def in_range(article):
+        art_date = article.date.date()
+        if date_start and art_date < date_start:
+            return False
+        if art_date > date_end:
+            return False
+        return True
+
+    filtered = [a for a in articles if in_range(a)]
+
+    # Log di riepilogo
+    if date_start:
+        logger.info("Pelican_fediverse: filtro date attivo da %s a %s", date_start, date_end)
+    else:
+        logger.info("Pelican_fediverse: filtro date attivo fino a %s", date_end)
+    logger.info("Pelican_fediverse: articoli dopo il filtro: %d su %d", len(filtered), len(articles))
+
+    return filtered
 
 
 # Collect config info and start the main procedure
@@ -103,6 +136,9 @@ def post_updates(generator, writer):
     for article in generator.articles:
         if article.url not in articleslist:
             new_posts.append(article)
+
+    # Filter by date range if configured
+    new_posts = filter_by_date(new_posts, generator.settings)
 
     # We only write the newly found sites to disk if posting them worked. That way we can retry later
     if new_posts:
