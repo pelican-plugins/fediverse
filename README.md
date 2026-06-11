@@ -36,6 +36,8 @@ Pelican can nicely handle tags with whitespaces (for example `#My nice article`)
 
 ### New metadata **ftags**
 
+Thanks to [Fipaddict](https://github.com/Fipaddict) for this feature!
+
 You can use the `ftags` metadata to add specific tags to a Fediverse post without including Pelican hashtags.
 ```markdown
 Title: This is a ftags sample usage
@@ -59,6 +61,24 @@ ALL_TAGS = 'no'
 to publish ftags only.
 
 Default behaviour: publish both.
+
+### Data interval feature
+
+Feature inspired by [Stuaxo](https://github.com/stuaxo)
+
+Set in your `pelicanconf.py` the following two parameters
+
+``` python
+MASTODON_DATE_START = "2024-01-01"
+MASTODON_DATE_END   = "2024-06-30"
+```
+and the plugin will publish on Mastodon ONLY articles with `article.date` included in this interval.
+
+If `MASTODON_DATE_START = ""` then apply any lower limit.
+
+If `MASTODON_DATE_END = ""` then apply `date.today()` as upper limit.
+
+If both variables are empty/not present then publish all.
 
 ## Mastodon APIs
 
